@@ -2,27 +2,35 @@ from flask import *
  
 app = Flask(__name__)
  
-@app.route("/", methods=["GET", "POST"])
-def odd_even():
-    if request.method == "GET":
-        return """
-        下に整数を入力してください。奇数か偶数か判定します
-        <form action="/" method="POST">
-        <input name="num"></input>
-        </form>"""
-    else:
-        try:
-            return """
-            {}は{}です！
-            <form action="/" method="POST">
-            <input name="num"></input>
-            </form>""".format(str(request.form["num"]), ["偶数", "奇数"][int(request.form["num"]) % 2])
-        except:
-            return """
-                    有効な数字ではありません！入力しなおしてください。
-                    <form action="/" method="POST">
-                    <input name="num"></input>
-                    </form>"""
+@app.route('/', methods=['GET'])
+def index():
+    return '''
+    <form method="post" action="/upload" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <button>upload</button>
+    </form>
+'''
+
+# アップロード機能
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'file' not in request.files:
+        return 'ファイル未指定'
+
+    # fileの取得（FileStorage型で取れる）
+    # https://tedboy.github.io/flask/generated/generated/werkzeug.FileStorage.html
+    fs = request.files['file']
+
+    # 下記のような情報がFileStorageからは取れる
+    app.logger.info('file_name={}'.format(fs.filename))
+    app.logger.info('content_type={} content_length={}, mimetype={}, mimetype_params={}'.format(
+        fs.content_type, fs.content_length, fs.mimetype, fs.mimetype_params))
+
+    # ファイルを保存
+    for line in fs:
+        print(line)
+
+
  
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8888, debug=True)
