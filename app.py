@@ -5,20 +5,21 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def index():
     return '''
-    <form method="post" action="/upload" enctype="multipart/form-data">
+    <form method="post" action="/upload_text" enctype="multipart/form-data">
       <input type="file" name="file">
+      <button>upload</button>
+    </form>
+    <form method="post" action="/upload_direct">
+      <textarea name="name"></textarea>
       <button>upload</button>
     </form>
 '''
 
 # アップロード機能
-@app.route('/upload', methods=['POST'])
-def upload():
+@app.route('/upload_text', methods=['POST'])
+def upload_text():
     if 'file' not in request.files:
         return 'ファイル未指定'
-
-    # fileの取得（FileStorage型で取れる）
-    # https://tedboy.github.io/flask/generated/generated/werkzeug.FileStorage.html
     fs = request.files['file']
 
     # 下記のような情報がFileStorageからは取れる
@@ -27,8 +28,19 @@ def upload():
         fs.content_type, fs.content_length, fs.mimetype, fs.mimetype_params))
 
     # ファイルを保存
+    text_file = ''
     for line in fs:
-        print(line)
+        line = line.decode('utf-8')
+        line = line.rstrip('\n')
+        text_file += line
+    print(text_file)
+
+@app.route('/upload_direct', methods=["POST"])
+def result_post():
+    # POST送信の処理
+    field = request.form['name']
+    #print(field)
+
 
 
  
