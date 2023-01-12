@@ -1,4 +1,5 @@
 from flask import *
+from save_word2vec import save_word2vec_model
  
 app = Flask(__name__)
  
@@ -35,13 +36,16 @@ def upload_text():
         text_file += line
     print(text_file)
 
+    save_word2vec_model()
+
 @app.route('/upload_direct', methods=["POST"])
 def result_post():
     # POST送信の処理
     field = request.form['name']
-    #print(field)
+    print(field)
 
-
+    #load_path = 'wakati.txt'
+    save_word2vec_model(データが入ったファイルパス)
 
  
 if __name__ == "__main__":
