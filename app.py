@@ -1,5 +1,5 @@
 from flask import *
-from save_word2vec import save_word2vec_model
+import save_word2vec
  
 app = Flask(__name__)
  
@@ -29,14 +29,15 @@ def upload_text():
         fs.content_type, fs.content_length, fs.mimetype, fs.mimetype_params))
 
     # ファイルを保存
-    text_file = ''
-    for line in fs:
-        line = line.decode('utf-8')
-        line = line.rstrip('\n')
-        text_file += line
-    print(text_file)
+    #text_file = ''
+    #for line in fs:
+        #line = line.decode('utf-8')
+        #line = line.rstrip('\n')
+        #text_file += line
+    #print(text_file)
+    fs.save('保存するファイルパス')
 
-    save_word2vec_model()
+    #save_word2vec_model()
 
 @app.route('/upload_direct', methods=["POST"])
 def result_post():
@@ -44,9 +45,13 @@ def result_post():
     field = request.form['name']
     print(field)
 
-    #load_path = 'wakati.txt'
-    save_word2vec_model(データが入ったファイルパス)
+    #入力されたものをファイルにする
+    file = open('/Users/yutarotakei/Program_Python/flask_practice/test.txt', mode='w')
+    file.write(field)
+    file.close()
 
+    #load_path = 'wakati.txt'
+    save_word2vec_model('/Users/yutarotakei/Program_Python/flask_practice/test.txt')
  
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8888, debug=True)
