@@ -1,5 +1,5 @@
 from flask import *
-import save_word2vec
+from save_word2vec import *
  
 app = Flask(__name__)
  
