@@ -37,7 +37,8 @@ def upload_text():
     #print(text_file)
     fs.save('保存するファイルパス')
 
-    #save_word2vec_model()
+    word_model = save_word2vec_model()
+    return jsonify({"result": word_model})
 
 @app.route('/upload_direct', methods=["POST"])
 def result_post():
@@ -51,7 +52,9 @@ def result_post():
     file.close()
 
     #load_path = 'wakati.txt'
-    save_word2vec_model('/Users/yutarotakei/Program_Python/flask_practice/test.txt')
+    word_model = save_word2vec_model('/Users/yutarotakei/Program_Python/flask_practice/test.txt')
+
+    return jsonify({"result": word_model})
  
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8888, debug=True)
