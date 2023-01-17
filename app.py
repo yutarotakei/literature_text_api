@@ -14,6 +14,11 @@ def index():
       <textarea name="name"></textarea>
       <button>upload</button>
     </form>
+    <p>ポジティブな単語</p>
+    <form method="post" action="/upload_direct">
+      <textarea name="name"></textarea>
+      <button>upload</button>
+    </form>
 '''
 
 # アップロード機能
