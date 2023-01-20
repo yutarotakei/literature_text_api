@@ -1,5 +1,6 @@
 from flask import *
 from save_word2vec import *
+from similar import *
  
 app = Flask(__name__)
  
@@ -11,12 +12,9 @@ def index():
       <button>upload</button>
     </form>
     <form method="post" action="/upload_direct">
-      <textarea name="name"></textarea>
-      <button>upload</button>
-    </form>
-    <p>ポジティブな単語</p>
-    <form method="post" action="/upload_direct">
-      <textarea name="name"></textarea>
+      <textarea name="name" cols=60" rows="30"></textarea>
+          <p>ポジティブな単語</p>
+      <textarea name="positive_word"></textarea>
       <button>upload</button>
     </form>
 '''
@@ -49,7 +47,9 @@ def upload_text():
 def result_post():
     # POST送信の処理
     field = request.form['name']
-    print(field)
+    word = request.form['positive_word']
+    #print(field)
+    #print(word)
 
     #入力されたものをファイルにする
     file = open('/Users/yutarotakei/Program_Python/flask_practice/test.txt', mode='w')
@@ -57,9 +57,14 @@ def result_post():
     file.close()
 
     #load_path = 'wakati.txt'
-    word_model = save_word2vec_model('/Users/yutarotakei/Program_Python/flask_practice/test.txt')
+    save_word2vec_model('/Users/yutarotakei/Program_Python/flask_practice/test.txt')
+    save_model_path = 'save.model'
+    results = most_similar(save_model_path, word)
 
-    return jsonify({"result": word_model})
+    return jsonify({"result": results})
+
+
+
  
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8888, debug=True)
